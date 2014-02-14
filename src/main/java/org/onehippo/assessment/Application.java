@@ -17,7 +17,6 @@ import static org.onehippo.assessment.NodeUtils.navigateQueryResponseNode;
  * @version "$Id$"
  */
 public final class Application {
-	private static final long serialVersionUID = 7817938827440690167L;
 	private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 	//private static final String JCR_QUERY = "//element(*,hst:abstractcomponent)";
 	private static final String JCR_QUERY_PREFIX = "//*[jcr:contains(.,'";
@@ -40,10 +39,12 @@ public final class Application {
 
 	private static void thirdTask(Session session, String queryTerm) throws RepositoryException {
 		LOG.info("::Third::");
+		final String query = JCR_QUERY_PREFIX + queryTerm + JCR_QUERY_SUFFIX;
 		final QueryResult queryResult = session.getWorkspace()
 				.getQueryManager()
-				.createQuery(JCR_QUERY_PREFIX + queryTerm + JCR_QUERY_SUFFIX, Query.XPATH)
+				.createQuery(query, Query.XPATH)
 				.execute();
+		LOG.debug("Query executed :: " + query);
 		NodeIterator resultNodes = queryResult.getNodes();
 		navigateQueryResponseNode(resultNodes);
 	}
