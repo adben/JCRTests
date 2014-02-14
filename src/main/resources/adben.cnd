@@ -1,0 +1,29 @@
+<'adben'='http://www.onehippo.org/adben/nt/1.0'>
+<'hippo'='http://www.onehippo.org/jcr/hippo/nt/2.0.4'>
+<'hippostd'='http://www.onehippo.org/jcr/hippostd/nt/2.0'>
+<'hippostdpubwf'='http://www.onehippo.org/jcr/hippostdpubwf/nt/1.0'>
+<'nt'='http://www.jcp.org/jcr/nt/1.0'>
+
+[adben:basedocument] > hippo:document, hippostd:publishableSummary, hippostdpubwf:document
+  orderable
+
+[adben:newsdocument] > adben:basedocument, hippostd:relaxed
+  orderable
+
+[adben:textdocument] > adben:basedocument, hippostd:relaxed
+  orderable
+
+[adben:paragraph] > nt:unstructured
+  orderable
+- adben:paragraphtitle (string)
+- adben:content (string)
+
+[adben:chapter] > nt:unstructured
+  orderable
+- adben:chaptername (string)
++ adben:paragraph (adben:paragraph) multiple
+
+[adben:basebook] > nt:unstructured
+  orderable
+- adben:bookname (string) mandatory
++ adben:chapter  (adben:chapter) multiple
