@@ -1,11 +1,19 @@
-package org.onehippo.assessment;
+package org.onehippo.assessment.util;
 
+import org.onehippo.assessment.beans.Book;
+import org.onehippo.assessment.beans.Chapter;
+import org.onehippo.assessment.beans.Paragraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Utility class for book {@link javax.jcr.Node} proposes
@@ -66,15 +74,85 @@ public final class BookUtils {
 	}
 
 
-	protected static void displayBook(String nodeCreatedPath) {
+	public static void displayBook(Session session, String nodeCreatedPath) {
 		//display the persisted book node
+		try {
+			Node bookNode = session.getNode(nodeCreatedPath);
+			final Property bookPrimaryProperty = bookNode.getProperty(BookUtils.BOOK_PRIMARY_TYPE);
+			if (null != bookPrimaryProperty && nodeCreatedPath.equalsIgnoreCase(bookPrimaryProperty.getString())) {
+				Book book = obtainCompleteBook(bookNode);
+				showBook(book);
+			} else {
+				LOG.error("The given path {} does not correspond to the book definition", nodeCreatedPath);
+			}
+		} catch (RepositoryException e) {
+			LOG.error("There was an error displaying the book node at {}, with exception {}", nodeCreatedPath, e);
+		}
+	}
+
+	private static void showBook(Book book) {
+		LOG.info("Rendering Book => {}", book);
+	}
+
+	private static Book obtainCompleteBook(Node node) {
+		List<Chapter> chapters = new ArrayList<Chapter>();
+		Book book = new Book();
+		String title = "";
+		try {
+			title = node.getProperty(BOOK_NAME_PROPERTY).getString();
+			final NodeIterator chapterNodes = node.getNodes(CHAPTER_PRIMARY_TYPE);
+			while (chapterNodes.hasNext()) {
+				Chapter chapter = obtainChapter(chapterNodes.nextNode());
+				chapters.add(chapter);
+			}
+		} catch (RepositoryException e) {
+			LOG.error("There was an error obtaining the chapter node from the book, with exception {}", e);
+		}
+		book.setTitle(title);
+		book.setChapters(chapters);
+		return book;
+	}
+
+	private static Chapter obtainChapter(Node node) {
+		List<Paragraph> paragraphs = new ArrayList<Paragraph>();
+		Chapter chapter = new Chapter();
+		String title = "";
+		try {
+			title = node.getProperty(CHAPTER_NAME_PROPERTY).getString();
+			final NodeIterator paragraphNodes = node.getNodes(PARAGRAPH_PRIMARY_TYPE);
+			while (paragraphNodes.hasNext()) {
+				Paragraph paragraph = obtainParagraph(paragraphNodes.nextNode());
+				paragraphs.add(paragraph);
+			}
+		} catch (RepositoryException e) {
+			LOG.error("There was an error obtaining the chapter node from the book, with exception {}", e);
+		}
+		chapter.setTitle(title);
+		chapter.setParagraphs(paragraphs);
+		return chapter;
+	}
+
+	private static Paragraph obtainParagraph(Node node) {
+		Paragraph paragraph = new Paragraph();
+		String title = "";
+		String content = "";
+		try {
+			title = node.getProperty(PARAGRAPH_NAME_PROPERTY).getString();
+			content = node.getProperty(PARAGRAPH_CONTENT_PROPERTY).getString();
+
+		} catch (RepositoryException e) {
+			LOG.error("There was an error obtaining the chapter node from the book, with exception {}", e);
+		}
+		paragraph.setTitle(title);
+		paragraph.setContent(content);
+		return paragraph;
 	}
 
 	//create and attach a chapter node,
 	//create and attach a paragraph node,
 	//persist,
 	//Return the node path
-	protected static Node createBook(Node booksParent) {
+	public static Node createBook(Node booksParent) {
 		Node book = null;
 		String title = BookUtils.obtainRandomTitleName("Book");
 		try {
@@ -87,7 +165,7 @@ public final class BookUtils {
 	}
 
 
-	protected static void attachChapters(Node bookNode, int numberChapters) {
+	public static void attachChapters(Node bookNode, int numberChapters) {
 		for (int i = 0; i < numberChapters; i++) {
 			Node chapterNode;
 			String title = BookUtils.obtainRandomTitleName("Chapter");

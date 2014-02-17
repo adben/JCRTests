@@ -1,5 +1,7 @@
 package org.onehippo.assessment;
 
+import org.onehippo.assessment.util.BookUtils;
+import org.onehippo.assessment.util.NodeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,8 +12,6 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 
-import static org.onehippo.assessment.NodeUtils.navigateNode;
-import static org.onehippo.assessment.NodeUtils.navigateQueryResponseNode;
 
 /**
  * @version "$Id$"
@@ -40,7 +40,7 @@ public final class Application {
 		LOG.info(":: Second ::");
 		Node root = session.getNode(scope);
 		NodeIterator nodeIt = root.getNodes();
-		navigateNode("", nodeIt);
+		NodeUtils.navigateNode("", nodeIt);
 	}
 
 	private static void thirdTask(Session session, String queryTerm) throws RepositoryException {
@@ -52,7 +52,7 @@ public final class Application {
 				.execute();
 		LOG.debug("Query executed :: " + query);
 		NodeIterator resultNodes = queryResult.getNodes();
-		navigateQueryResponseNode(resultNodes);
+		NodeUtils.navigateQueryResponseNode(resultNodes);
 	}
 
 	private static void fourTask(Session session, String scope) {

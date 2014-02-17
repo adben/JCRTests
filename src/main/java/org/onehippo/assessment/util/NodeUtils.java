@@ -1,4 +1,4 @@
-package org.onehippo.assessment;
+package org.onehippo.assessment.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public final class NodeUtils {
 	}
 
 
-	protected static void navigateQueryResponseNode(NodeIterator nodeIt) throws RepositoryException {
+	public static void navigateQueryResponseNode(NodeIterator nodeIt) throws RepositoryException {
 		// print out node names of roots child nodes
 		while (nodeIt.hasNext()) {
 			Node child = nodeIt.nextNode();
@@ -32,7 +32,7 @@ public final class NodeUtils {
 		}
 	}
 
-	protected static void navigateNode(String indent, NodeIterator nodeIt) throws RepositoryException {
+	public static void navigateNode(String indent, NodeIterator nodeIt) throws RepositoryException {
 		// print out node names of roots child nodes
 		while (nodeIt.hasNext()) {
 			Node child = nodeIt.nextNode();
