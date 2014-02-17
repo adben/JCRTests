@@ -42,6 +42,8 @@ public enum RepoConnector {
 	}
 
 	public void logout() {
-		this.session.logout();
+		if (null != this.session) {
+			this.session.logout();
+		}
 	}
 }

@@ -53,5 +53,9 @@
     <level value="debug"/>
     <appender-ref ref="console"/>
   </category>
+	<category additivity="false" name="org.apache.jackrabbit.rmi.observation.ClientEventPoll">
+    <level value="debug"/>
+    <appender-ref ref="console"/>
+  </category>
 
 </log4j:configuration>

@@ -25,8 +25,8 @@ import java.util.List;
 public final class BookUtils {
 	private static final Logger LOG = LoggerFactory.getLogger(BookUtils.class);
 
-	private static final String BOOK_PRIMARY_TYPE = "adben:basebook";
-	private static final String BOOK_NAME_PROPERTY = "adben:bookname";
+	public static final String BOOK_PRIMARY_TYPE = "adben:basebook";
+	public static final String BOOK_NAME_PROPERTY = "adben:bookname";
 	private static final String CHAPTER_PRIMARY_TYPE = "adben:chapter";
 	private static final String CHAPTER_NAME_PROPERTY = "adben:chaptername";
 	private static final String PARAGRAPH_PRIMARY_TYPE = "adben:paragraph";
@@ -53,7 +53,7 @@ public final class BookUtils {
 	 * @param bookPart the book section
 	 * @return string for the title
 	 */
-	private static String obtainRandomTitleName(String bookPart) {
+	public static String obtainRandomTitleName(String bookPart) {
 		return obtainRandomTitleName(bookPart, 0, 0);
 	}
 
@@ -94,7 +94,7 @@ public final class BookUtils {
 	 * @param originalString the string to escape
 	 * @return the escaped string
 	 */
-	private static String obtainJcrName(String originalString) {
+	public static String obtainJcrName(String originalString) {
 		String parsedTitle = originalString.replaceAll(" ", "_");
 		parsedTitle = parsedTitle.replaceAll(":", "_");
 		return parsedTitle.toLowerCase();
@@ -106,7 +106,7 @@ public final class BookUtils {
 	 * @param max the max value
 	 * @return a random integer
 	 */
-	private static int getRandom(int max) {
+	public static int getRandom(int max) {
 		return (int) (Math.random() * max);
 	}
 
