@@ -75,7 +75,7 @@ public final class Application {
 				LOG.error("Cannot persist the just created book at {}", bookPath);
 			}
 			if (null != bookPath) {
-				BookUtils.displayBook(bookPath);
+				BookUtils.displayBook(session, bookPath);
 			} else {
 				LOG.error("Cannot display the recently created book!");
 			}

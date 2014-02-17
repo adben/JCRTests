@@ -23,4 +23,12 @@ public class Paragraph {
 	}
 
 	private String content;
+
+	@Override
+	public String toString() {
+		return "Paragraph{" +
+				"title='" + title.toUpperCase() + '\'' +
+				", content='" + content + '\'' +
+				'}';
+	}
 }

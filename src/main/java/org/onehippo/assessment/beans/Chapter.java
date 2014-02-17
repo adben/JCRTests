@@ -24,4 +24,15 @@ public class Chapter {
 	public void setParagraphs(List<Paragraph> paragraphs) {
 		this.paragraphs = paragraphs;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.getTitle().toUpperCase())
+				.append("\n");
+		for (Paragraph paragraph : this.getParagraphs()) {
+			sb.append(paragraph.toString());
+		}
+		return sb.toString();
+	}
 }

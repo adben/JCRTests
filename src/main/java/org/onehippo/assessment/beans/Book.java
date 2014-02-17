@@ -25,4 +25,15 @@ public class Book {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.getTitle().toUpperCase())
+				.append("\n");
+		for (Chapter chapter : this.getChapters()) {
+			sb.append(chapter.toString());
+		}
+		return sb.toString();
+	}
 }

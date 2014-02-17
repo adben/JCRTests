@@ -78,8 +78,8 @@ public final class BookUtils {
 		//display the persisted book node
 		try {
 			Node bookNode = session.getNode(nodeCreatedPath);
-			final Property bookPrimaryProperty = bookNode.getProperty(BookUtils.BOOK_PRIMARY_TYPE);
-			if (null != bookPrimaryProperty && nodeCreatedPath.equalsIgnoreCase(bookPrimaryProperty.getString())) {
+			final Property bookPrimaryProperty = bookNode.getProperty("jcr:primaryType");
+			if (null != bookPrimaryProperty && BOOK_PRIMARY_TYPE.equalsIgnoreCase(bookPrimaryProperty.getString())) {
 				Book book = obtainCompleteBook(bookNode);
 				showBook(book);
 			} else {
@@ -109,7 +109,7 @@ public final class BookUtils {
 			LOG.error("There was an error obtaining the chapter node from the book, with exception {}", e);
 		}
 		book.setTitle(title);
-		book.setChapters(chapters);
+		book.setChapters( chapters);
 		return book;
 	}
 
