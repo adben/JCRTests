@@ -21,13 +21,14 @@ import java.util.List;
 public final class BookUtils {
 	private static final Logger LOG = LoggerFactory.getLogger(BookUtils.class);
 
-	public static final String BOOK_PRIMARY_TYPE = "adben:basebook";
-	public static final String BOOK_NAME_PROPERTY = "adben:bookname";
-	public static final String CHAPTER_PRIMARY_TYPE = "adben:chapter";
-	public static final String CHAPTER_NAME_PROPERTY = "adben:chaptername";
-	public static final String PARAGRAPH_PRIMARY_TYPE = "adben:paragraph";
-	public static final String PARAGRAPH_NAME_PROPERTY = "adben:paragraphtitle";
-	public static final String PARAGRAPH_CONTENT_PROPERTY = "adben:content";
+	private static final String BOOK_PRIMARY_TYPE = "adben:basebook";
+	private static final String BOOK_NAME_PROPERTY = "adben:bookname";
+	private static final String CHAPTER_PRIMARY_TYPE = "adben:chapter";
+	private static final String CHAPTER_NAME_PROPERTY = "adben:chaptername";
+	private static final String PARAGRAPH_PRIMARY_TYPE = "adben:paragraph";
+	private static final String PARAGRAPH_NAME_PROPERTY = "adben:paragraphtitle";
+	private static final String PARAGRAPH_CONTENT_PROPERTY = "adben:content";
+	private static final String JCR_PRIMARY_TYPE = "jcr:primaryType";
 
 	/**
 	 * utility class not meant to be instantiated
@@ -36,8 +37,20 @@ public final class BookUtils {
 	}
 
 	protected static String obtainRandomTitleName(String bookPart) {
-		return "Generated " + bookPart + " title name at " + new Date().toString();
+		return obtainRandomTitleName(bookPart, 0, 0);
 	}
+
+	private static String obtainRandomTitleName(String bookPart, int part, int total) {
+		StringBuffer title = new StringBuffer();
+		title.append("Generated " + bookPart);
+		if (part > 0) {
+			title.append(" " + part + " of " + total);
+		} else {
+			title.append(" at " + new Date().toString());
+		}
+		return title.toString();
+	}
+
 
 	protected static String ontainRandomContent() {
 		return "The following functional areas will be reviewed by the expert group for possible inclusion:\n" +
@@ -78,7 +91,7 @@ public final class BookUtils {
 		//display the persisted book node
 		try {
 			Node bookNode = session.getNode(nodeCreatedPath);
-			final Property bookPrimaryProperty = bookNode.getProperty("jcr:primaryType");
+			final Property bookPrimaryProperty = bookNode.getProperty(JCR_PRIMARY_TYPE);
 			if (null != bookPrimaryProperty && BOOK_PRIMARY_TYPE.equalsIgnoreCase(bookPrimaryProperty.getString())) {
 				Book book = obtainCompleteBook(bookNode);
 				showBook(book);
@@ -91,7 +104,7 @@ public final class BookUtils {
 	}
 
 	private static void showBook(Book book) {
-		LOG.info("Rendering Book => {}", book);
+		LOG.info("Rendering Book => {}", book.toString());
 	}
 
 	private static Book obtainCompleteBook(Node node) {
@@ -100,16 +113,18 @@ public final class BookUtils {
 		String title = "";
 		try {
 			title = node.getProperty(BOOK_NAME_PROPERTY).getString();
-			final NodeIterator chapterNodes = node.getNodes(CHAPTER_PRIMARY_TYPE);
+			final NodeIterator chapterNodes = node.getNodes();
 			while (chapterNodes.hasNext()) {
 				Chapter chapter = obtainChapter(chapterNodes.nextNode());
-				chapters.add(chapter);
+				if (null != chapter) {
+					chapters.add(chapter);
+				}
 			}
 		} catch (RepositoryException e) {
 			LOG.error("There was an error obtaining the chapter node from the book, with exception {}", e);
 		}
 		book.setTitle(title);
-		book.setChapters( chapters);
+		book.setChapters(chapters);
 		return book;
 	}
 
@@ -118,11 +133,17 @@ public final class BookUtils {
 		Chapter chapter = new Chapter();
 		String title = "";
 		try {
+			final String currentType = node.getProperty(JCR_PRIMARY_TYPE).getString();
+			if (!CHAPTER_PRIMARY_TYPE.equalsIgnoreCase(currentType)) {
+				return null;
+			}
 			title = node.getProperty(CHAPTER_NAME_PROPERTY).getString();
-			final NodeIterator paragraphNodes = node.getNodes(PARAGRAPH_PRIMARY_TYPE);
+			final NodeIterator paragraphNodes = node.getNodes();
 			while (paragraphNodes.hasNext()) {
 				Paragraph paragraph = obtainParagraph(paragraphNodes.nextNode());
-				paragraphs.add(paragraph);
+				if (null != paragraph) {
+					paragraphs.add(paragraph);
+				}
 			}
 		} catch (RepositoryException e) {
 			LOG.error("There was an error obtaining the chapter node from the book, with exception {}", e);
@@ -137,6 +158,10 @@ public final class BookUtils {
 		String title = "";
 		String content = "";
 		try {
+			final String currentType = node.getProperty(JCR_PRIMARY_TYPE).getString();
+			if (!PARAGRAPH_PRIMARY_TYPE.equalsIgnoreCase(currentType)) {
+				return null;
+			}
 			title = node.getProperty(PARAGRAPH_NAME_PROPERTY).getString();
 			content = node.getProperty(PARAGRAPH_CONTENT_PROPERTY).getString();
 
@@ -168,7 +193,7 @@ public final class BookUtils {
 	public static void attachChapters(Node bookNode, int numberChapters) {
 		for (int i = 0; i < numberChapters; i++) {
 			Node chapterNode;
-			String title = BookUtils.obtainRandomTitleName("Chapter");
+			String title = BookUtils.obtainRandomTitleName("Chapter", i, numberChapters);
 			try {
 				chapterNode = bookNode.addNode(BookUtils.obtainJcrName(title), BookUtils.CHAPTER_PRIMARY_TYPE);
 				chapterNode.setProperty(BookUtils.CHAPTER_NAME_PROPERTY, title);
@@ -183,7 +208,7 @@ public final class BookUtils {
 	private static void attachParagraph(Node chapterNode, int numberParagraphs) {
 		for (int i = 0; i < numberParagraphs; i++) {
 			Node paragraphNode;
-			String title = BookUtils.obtainRandomTitleName("Paragraph");
+			String title = BookUtils.obtainRandomTitleName("Paragraph", i, numberParagraphs);
 			String content = BookUtils.ontainRandomContent();
 			try {
 				paragraphNode = chapterNode.addNode(BookUtils.obtainJcrName(title), BookUtils.PARAGRAPH_PRIMARY_TYPE);
