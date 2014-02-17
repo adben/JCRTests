@@ -50,7 +50,7 @@ public final class Application {
 				.getQueryManager()
 				.createQuery(query, Query.XPATH)
 				.execute();
-		LOG.debug("Query executed :: " + query);
+		LOG.info("Query executed :: " + query);
 		NodeIterator resultNodes = queryResult.getNodes();
 		NodeUtils.navigateQueryResponseNode(resultNodes);
 	}
