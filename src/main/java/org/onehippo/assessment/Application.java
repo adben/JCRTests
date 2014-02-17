@@ -18,7 +18,7 @@ import javax.jcr.query.QueryResult;
  */
 public final class Application {
 	private static final Logger LOG = LoggerFactory.getLogger(Application.class);
-	//private static final String JCR_QUERY = "//element(*,hst:abstractcomponent)";
+	//private static final String JCR_QUERY = "//*[jcr:contains(.,'hippo')]";
 	private static final String JCR_QUERY_PREFIX = "//*[jcr:contains(.,'";
 	private static final String JCR_QUERY_SUFFIX = "')]";
 
@@ -55,19 +55,18 @@ public final class Application {
 		NodeUtils.navigateQueryResponseNode(resultNodes);
 	}
 
-	private static void fourTask(Session session, String scope) {
+	private static void fourTask(Session session, String repositoryBooksLocation) {
 		LOG.info(":: Four ::");
 		Node booksParent = null;
 		String bookPath = null;
 
 		try {
-			booksParent = session.getNode(scope);
+			booksParent = session.getNode(repositoryBooksLocation);
 		} catch (RepositoryException e) {
-			LOG.error("the given path {} for persist the Books does not exist on the repository", scope);
+			LOG.error("the given path {} for persist the Books does not exist on the repository", repositoryBooksLocation);
 		}
 		if (null != booksParent) {
-			Node bookNode = BookUtils.createBook(booksParent);
-			BookUtils.attachChapters(bookNode, BookUtils.getRandom(10));
+			Node bookNode = BookUtils.buildBook(booksParent);
 			try {
 				bookPath = bookNode.getPath();
 				session.save();
@@ -77,10 +76,9 @@ public final class Application {
 			if (null != bookPath) {
 				BookUtils.displayBook(session, bookPath);
 			} else {
-				LOG.error("Cannot display the recently created book!");
+				LOG.error("Cannot display the recently created book!, " +
+						"please check this node at the repository console");
 			}
 		}
 	}
-
-
 }
