@@ -15,14 +15,10 @@ public enum RepoConnector {
 	INSTANCE;
 	private static final Logger LOG = LoggerFactory.getLogger(RepoConnector.class);
 	private static final String ADMIN = "admin";
+
 	private Session session;
 
-	RepoConnector() {
-		final Session currentSession = obtainRepositorySession();
-		setSession(currentSession);
-	}
-
-	private Session obtainRepositorySession() {
+	public void initializeConnection() {
 		HippoRepository repo;
 		Session obtainedSession = null;
 		String repoUrl = "rmi://127.0.0.1:1099/hipporepository";
@@ -34,16 +30,18 @@ public enum RepoConnector {
 		} catch (RepositoryException e) {
 			LOG.error("Error obtaining the Repository session  " + e);
 		}
-		return obtainedSession;
+		setSession(obtainedSession);
+	}
+
+	private void setSession(Session session) {
+		this.session = session;
 	}
 
 	public Session getSession() {
 		return session;
 	}
 
-
-	private void setSession(Session session) {
-		this.session = session;
+	public void logout() {
+		this.session.logout();
 	}
-
 }

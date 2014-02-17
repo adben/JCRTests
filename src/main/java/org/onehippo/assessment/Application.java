@@ -23,18 +23,16 @@ public final class Application {
 	private static final String JCR_QUERY_SUFFIX = "')]";
 
 	public static void main(String[] args) {
-		Session session = null;
 		try {
-			session = RepoConnector.INSTANCE.getSession();
+			RepoConnector.INSTANCE.initializeConnection();
+			Session session = RepoConnector.INSTANCE.getSession();
 			secondTask(session, "/content");
 			thirdTask(session, "hippo");
 			fourTask(session, "/content/books");
 		} catch (RepositoryException e) {
 			LOG.info("Error establishing connection to the repo " + e);
 		} finally {
-			if (session != null) {
-				session.logout();
-			}
+			RepoConnector.INSTANCE.logout();
 		}
 	}
 
