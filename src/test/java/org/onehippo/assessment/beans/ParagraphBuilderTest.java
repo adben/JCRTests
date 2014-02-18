@@ -21,7 +21,7 @@ public class ParagraphBuilderTest {
 
 	@Test
 	public void testToStrong() throws Exception {
-		final String plainParagraph = "\nTHIS IS THE TITLE OF THE PARAGRAPH\nthis is better that the loremipsum\n";
+		final String plainParagraph = "\nTHIS IS THE TITLE OF THE PARAGRAPH\nthis is better than the loremipsum\n";
 		assertThat(p.toString(), is(plainParagraph));
 	}
 }
