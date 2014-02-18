@@ -2,6 +2,8 @@ package org.onehippo.assessment.event;
 
 import junit.framework.TestCase;
 import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.onehippo.assessment.RepoConnector;
 import org.onehippo.assessment.util.BookUtils;
 import org.slf4j.Logger;
@@ -24,7 +26,8 @@ public class HippoObservationTest extends TestCase {
 		hippoObservation = new HippoObservation();
 	}
 
-	@org.junit.Test
+	@Test
+	@Ignore
 	public void testActivate() throws Exception {
 		hippoObservation.activate();
 		final Session session = RepoConnector.INSTANCE.getSession();
