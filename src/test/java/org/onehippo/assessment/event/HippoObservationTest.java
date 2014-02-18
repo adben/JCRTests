@@ -45,10 +45,8 @@ public class HippoObservationTest extends TestCase {
 		if (null != booksParent) {
 			Node bookNode = buildBook(booksParent);
 			try {
-				for (int i = 0; i < 6; i++) {
-					bookPath = bookNode.getPath();
-					session.save();
-				}
+				bookPath = bookNode.getPath();
+				session.save();
 			} catch (RepositoryException e) {
 				LOG.error("Cannot persist the just created book at {}", bookPath);
 			}
@@ -64,11 +62,10 @@ public class HippoObservationTest extends TestCase {
 
 	public static Node buildBook(Node booksParent) {
 		Node book = null;
-		String title = BookUtils.obtainRandomTitleName("Book") + BookUtils.getRandom(10);
-
+		String nameBook = BookUtils.obtainRandomTitleName("Book") + BookUtils.getRandom(10);
 		try {
-			book = booksParent.addNode(BookUtils.obtainJcrName(title), BookUtils.BOOK_PRIMARY_TYPE);
-			book.setProperty(BookUtils.BOOK_NAME_PROPERTY, title);
+			book = booksParent.addNode(BookUtils.obtainJcrName(nameBook), BookUtils.BOOK_PRIMARY_TYPE);
+			//book.setProperty(BookUtils.BOOK_NAME_PROPERTY, title);
 		} catch (RepositoryException e) {
 			LOG.error("Cannot create the book in the repository with exception, {}", e);
 		}
