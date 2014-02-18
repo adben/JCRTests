@@ -10,7 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * test for {@link org.onehippo.assessment.beans.Paragraph}
  */
 public class ParagraphBuilderTest {
-	final String content = "this is better that the loremipsum";
+	final String content = "this is better than the loremipsum";
 	final String title = "this is the title of the paragraph";
 	Paragraph p;
 

@@ -28,11 +28,12 @@ public class HippoObservationTest extends TestCase {
 	public void testActivate() throws Exception {
 		hippoObservation.activate();
 		final Session session = RepoConnector.INSTANCE.getSession();
-		createEmptyBooks(session, "/content/books/");
+		createEmptyBook(session, "/content/books/");
+		createEmptyBook(session, "/content/books/");
 		//assertThat(session, is(nullValue()));
 	}
 
-	private static void createEmptyBooks(Session session, String repositoryBooksLocation) {
+	private static void createEmptyBook(Session session, String repositoryBooksLocation) {
 		LOG.info(":: try to create the   ::");
 		Node booksParent = null;
 		String bookPath = null;
@@ -50,22 +51,16 @@ public class HippoObservationTest extends TestCase {
 			} catch (RepositoryException e) {
 				LOG.error("Cannot persist the just created book at {}", bookPath);
 			}
-			if (null != bookPath) {
-				BookUtils.displayBook(session, bookPath);
-			} else {
-				LOG.error("Cannot display the recently created book!, " +
-						"please check this node at the repository console");
-			}
 		}
 	}
 
 
-	public static Node buildBook(Node booksParent) {
+	private static Node buildBook(Node booksParent) {
 		Node book = null;
 		String nameBook = BookUtils.obtainRandomTitleName("Book") + BookUtils.getRandom(10);
 		try {
 			book = booksParent.addNode(BookUtils.obtainJcrName(nameBook), BookUtils.BOOK_PRIMARY_TYPE);
-			//book.setProperty(BookUtils.BOOK_NAME_PROPERTY, title);
+			book.setProperty(BookUtils.BOOK_NAME_PROPERTY, nameBook);
 		} catch (RepositoryException e) {
 			LOG.error("Cannot create the book in the repository with exception, {}", e);
 		}

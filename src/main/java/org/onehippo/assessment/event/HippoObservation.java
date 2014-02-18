@@ -28,7 +28,9 @@ public class HippoObservation implements EventListener {
 			final ObservationManager observationManager = session.getWorkspace().getObservationManager();
 			observationManager.addEventListener(
 					this, //handler
-					Event.PROPERTY_ADDED | Event.NODE_ADDED, //binary combination of event types
+					Event.PERSIST |      //Combination of event types for persist
+							Event.NODE_ADDED | Event.NODE_MOVED | Event.NODE_REMOVED |  //Combination of event types for nodes
+							Event.PROPERTY_ADDED | Event.PROPERTY_CHANGED | Event.PROPERTY_REMOVED, //Combination of event types for properties
 					CONTENT_PATH, //path
 					true, //is Deep?
 					null, //uuids filter
@@ -61,9 +63,10 @@ public class HippoObservation implements EventListener {
 		try {
 			while (eventIterator.hasNext()) {
 				LOG.info("something has been changed at : {}", eventIterator.nextEvent().getPath());
-			  int countAtomically = counter.getCountAtomically();
+				int countAtomically = counter.getCountAtomically();
 				if (6 < countAtomically) {
 					try {
+						LOG.info("count on {}, reached max events.", countAtomically);
 						deactivate();
 					} catch (Exception e) {
 						LOG.error("unable to deactivate the Listener", e);
