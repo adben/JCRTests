@@ -27,7 +27,7 @@ public class BookTest {
 
 	@Test
 	public void shouldBuildABookOrdered() throws Exception {
-		assertThat(book.getChapters().size(), is(1));
+		assertThat(book.getChapters().size(), is(2));
 		final Paragraph paragraph = book.getChapters().get(0).getParagraphs().get(0);
 		assertThat(paragraph.getTitle(), is("p2"));
 	}
