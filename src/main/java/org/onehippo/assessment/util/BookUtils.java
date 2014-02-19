@@ -34,6 +34,8 @@ public final class BookUtils {
 	private static final String PARAGRAPH_CONTENT_PROPERTY = "adben:content";
 	private static final String JCR_PRIMARY_TYPE = "jcr:primaryType";
 	private static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
+	private static final int MAX_ALLOWED_PARAGRAPHS = 20;
+	private static final int MAX_ALLOWED_CHAPTERS = 10;
 
 
 	/**
@@ -124,7 +126,7 @@ public final class BookUtils {
 		try {
 			book = booksParent.addNode(BookUtils.obtainJcrName(title), BookUtils.BOOK_PRIMARY_TYPE);
 			book.setProperty(BookUtils.BOOK_NAME_PROPERTY, title);
-			attachChapters(book, BookUtils.getRandom(10));
+			attachChapters(book, BookUtils.getRandom(MAX_ALLOWED_CHAPTERS));
 		} catch (RepositoryException e) {
 			LOG.error("Cannot create the book in the repository with exception, {}", e);
 		}
@@ -144,7 +146,7 @@ public final class BookUtils {
 			try {
 				chapterNode = bookNode.addNode(BookUtils.obtainJcrName(title), BookUtils.CHAPTER_PRIMARY_TYPE);
 				chapterNode.setProperty(BookUtils.CHAPTER_NAME_PROPERTY, title);
-				attachParagraph(chapterNode, BookUtils.getRandom(20));
+				attachParagraph(chapterNode, BookUtils.getRandom(MAX_ALLOWED_PARAGRAPHS));
 			} catch (RepositoryException e) {
 				LOG.error("Cannot attach the chapter node to the book!, with exception {}", e);
 			}
