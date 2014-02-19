@@ -2,8 +2,6 @@ package org.onehippo.assessment;
 
 import org.hippoecm.repository.HippoRepository;
 import org.hippoecm.repository.HippoRepositoryFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -13,7 +11,6 @@ import javax.jcr.Session;
  */
 public enum RepoConnector {
 	INSTANCE;
-	private static final Logger LOG = LoggerFactory.getLogger(RepoConnector.class);
 	private static final String ADMIN = "admin";
 
 	private Session session;
@@ -37,8 +34,8 @@ public enum RepoConnector {
 	}
 
 	public void logout() {
-		if (null != this.session) {
-			this.session.logout();
+		if (null != getSession()) {
+			getSession().logout();
 		}
 	}
 }
