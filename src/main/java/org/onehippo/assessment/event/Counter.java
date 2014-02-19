@@ -5,12 +5,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * our counter
  */
-public class Counter {
+public enum Counter {
+	INSTANCE;
 
-	AtomicInteger atomicCount = new AtomicInteger(0);
+	private AtomicInteger atomicCount = new AtomicInteger(0);
 
 
-	public int getCountAtomically() {
+	public int increment() {
 		return atomicCount.incrementAndGet();
+	}
+
+	public int currentValue() {
+		return atomicCount.get();
 	}
 }
