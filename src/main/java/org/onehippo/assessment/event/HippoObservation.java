@@ -17,6 +17,11 @@ public class HippoObservation implements EventListener {
 	private static final Logger LOG = LoggerFactory.getLogger(HippoObservation.class);
 	private static final String CONTENT_PATH = "/content/";
 
+	/**
+	 * Obtains the {@link javax.jcr.observation.ObservationManager} from the session, adding the {@link javax.jcr.observation.EventListener}
+	 *
+	 * @throws Exception The exception if something wrong occurs
+	 */
 	public void activate() throws Exception {
 		LOG.info("activating HippoObservation...");
 		try {
@@ -40,6 +45,11 @@ public class HippoObservation implements EventListener {
 		}
 	}
 
+	/**
+	 * Removes the {@link javax.jcr.observation.EventListener} from the {@link javax.jcr.observation.ObservationManager}, and logout the {@link javax.jcr.Session}
+	 *
+	 * @throws Exception The exception if something wrong occurs
+	 */
 	public void deactivate() throws Exception {
 		LOG.info("deactivating HippoObservation...");
 		try {
@@ -58,6 +68,7 @@ public class HippoObservation implements EventListener {
 		LOG.info("Found event !!!!!!");
 		try {
 			while (eventIterator.hasNext()) {
+				///Notifying to the Counter that there was a change
 				LOG.info("something has been changed at : {}, counter at {}", eventIterator.nextEvent().getPath(), Counter.INSTANCE.increment());
 			}
 		} catch (RepositoryException e) {

@@ -17,6 +17,7 @@ import javax.jcr.Session;
  */
 public class HippoObservationTest extends TestCase {
 	private static final Logger LOG = LoggerFactory.getLogger(HippoObservationTest.class);
+	private static final int MILLIS = 20000;
 
 	HippoObservation hippoObservation;
 
@@ -30,7 +31,7 @@ public class HippoObservationTest extends TestCase {
 		hippoObservation.activate();
 		//This will trigger 3 Event changes at the repo
 		Node emptyBook = createEmptyBook(RepoConnector.INSTANCE.getSession(), "/content/books/");
-		Thread.sleep(20000);
+		Thread.sleep(MILLIS);
 
 		while (Counter.INSTANCE.currentValue() < 5) {
 			LOG.info("Counter at {}, executing some property changes ", Counter.INSTANCE.currentValue());
