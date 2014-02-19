@@ -11,7 +11,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 
 /**
- * provide the routines for the JCR {@link javax.jcr.Node}
+ * provide routines for the JCR {@link javax.jcr.Node Nodes}
  */
 public final class NodeUtils {
 	private static final String JCR_DATA = "jcr:data";
@@ -37,8 +37,14 @@ public final class NodeUtils {
 		}
 	}
 
+	/**
+	 * Printout node names of roots child nodes
+	 *
+	 * @param indent indentation as deep node info
+	 * @param nodeIt the parent {@link javax.jcr.Node}
+	 * @throws RepositoryException
+	 */
 	public static void navigateNode(String indent, NodeIterator nodeIt) throws RepositoryException {
-		// print out node names of roots child nodes
 		while (nodeIt.hasNext()) {
 			Node child = nodeIt.nextNode();
 			printNodePath(indent, child);
@@ -49,12 +55,26 @@ public final class NodeUtils {
 		}
 	}
 
-	private static void printNodePath(String indent, Node child) throws RepositoryException {
-		LOG.info(indent + child.getPath());
+	/**
+	 * Printout node paths of the given {@link javax.jcr.Node}
+	 *
+	 * @param indent indentation as deep node info
+	 * @param node   the {@link javax.jcr.Node}
+	 * @throws RepositoryException
+	 */
+	private static void printNodePath(String indent, Node node) throws RepositoryException {
+		LOG.info(indent + node.getPath());
 	}
 
-	private static void printNodeProps(String indent, Node child) throws RepositoryException {
-		final PropertyIterator properties = child.getProperties();
+	/**
+	 * Printout the node properties of the given {@link javax.jcr.Node}
+	 *
+	 * @param indent indentation as deep node info
+	 * @param node   the {@link javax.jcr.Node}
+	 * @throws RepositoryException
+	 */
+	private static void printNodeProps(String indent, Node node) throws RepositoryException {
+		final PropertyIterator properties = node.getProperties();
 		while (properties.hasNext()) {
 			Property property = properties.nextProperty();
 			//Not printing "jcr:data" types
