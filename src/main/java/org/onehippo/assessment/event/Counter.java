@@ -10,7 +10,6 @@ public enum Counter {
 
 	private AtomicInteger atomicCount = new AtomicInteger(0);
 
-
 	public int increment() {
 		return atomicCount.incrementAndGet();
 	}

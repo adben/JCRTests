@@ -21,30 +21,30 @@ public class Paragraph {
 		return title;
 	}
 
+	@Override
+	public String toString() {
+		return '\n' +
+				getTitle().toUpperCase() + '\n' +
+				getContent() + '\n';
+	}
+
 	public static class ParagraphBuilder {
 		private String title;
 
 		private String content;
 
-		public ParagraphBuilder withTitle(String title) {
-			this.title = title;
+		public ParagraphBuilder withTitle(final String titleInst) {
+			this.title = titleInst;
 			return this;
 		}
 
-		public ParagraphBuilder withContent(String content) {
-			this.content = content;
+		public ParagraphBuilder withContent(final String contentInst) {
+			this.content = contentInst;
 			return this;
 		}
 
 		public Paragraph build() {
 			return new Paragraph(this);
 		}
-	}
-
-	@Override
-	public String toString() {
-		return '\n' +
-				title.toUpperCase() + '\n' +
-				content + '\n';
 	}
 }

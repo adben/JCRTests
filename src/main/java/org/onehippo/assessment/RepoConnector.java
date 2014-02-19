@@ -20,21 +20,16 @@ public enum RepoConnector {
 
 	public void initializeConnection() throws RepositoryException {
 		HippoRepository repo;
-		Session obtainedSession = null;
 		String repoUrl = "rmi://127.0.0.1:1099/hipporepository";
-		try {
-			repo = HippoRepositoryFactory.getHippoRepository(repoUrl);
-			char[] password = ADMIN.toCharArray();
-			String username = ADMIN;
-			obtainedSession = repo.login(username, password);
-		} catch (RepositoryException e) {
-			LOG.error("Error obtaining the Repository session  " + e);
-		}
+		repo = HippoRepositoryFactory.getHippoRepository(repoUrl);
+		char[] password = ADMIN.toCharArray();
+		String username = ADMIN;
+		Session obtainedSession = repo.login(username, password);
 		setSession(obtainedSession);
 	}
 
-	private void setSession(Session session) {
-		this.session = session;
+	private void setSession(final Session sessionInst) {
+		this.session = sessionInst;
 	}
 
 	public Session getSession() {

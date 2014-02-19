@@ -23,26 +23,6 @@ public class Chapter {
 		return title;
 	}
 
-	public static class ChapterBuilder {
-		private String title;
-
-		private List<Paragraph> paragraphs;
-
-		public ChapterBuilder withTitle(String title) {
-			this.title = title;
-			return this;
-		}
-
-		public ChapterBuilder withParagraphs(List<Paragraph> paragraphs) {
-			this.paragraphs = paragraphs;
-			return this;
-		}
-
-		public Chapter build() {
-			return new Chapter(this);
-		}
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -53,5 +33,25 @@ public class Chapter {
 			sb.append(paragraph.toString());
 		}
 		return sb.toString();
+	}
+
+	public static class ChapterBuilder {
+		private String title;
+
+		private List<Paragraph> paragraphs;
+
+		public ChapterBuilder withTitle(final String titleInst) {
+			this.title = titleInst;
+			return this;
+		}
+
+		public ChapterBuilder withParagraphs(final List<Paragraph> paragraphList) {
+			this.paragraphs = paragraphList;
+			return this;
+		}
+
+		public Chapter build() {
+			return new Chapter(this);
+		}
 	}
 }

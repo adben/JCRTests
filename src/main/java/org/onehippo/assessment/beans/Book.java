@@ -23,25 +23,6 @@ public class Book {
 		return title;
 	}
 
-	public static class BookBuilder {
-		private String title;
-
-		private List<Chapter> chapters;
-
-		public BookBuilder withChapters(List<Chapter> chapters) {
-			this.chapters = chapters;
-			return this;
-		}
-
-		public BookBuilder(String title) {
-			this.title = title;
-		}
-
-		public Book build() {
-			return new Book(this);
-		}
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -52,4 +33,24 @@ public class Book {
 		}
 		return sb.toString();
 	}
+
+	public static class BookBuilder {
+		private String title;
+
+		private List<Chapter> chapters;
+
+		public BookBuilder withChapters(final List<Chapter> chaptersInst) {
+			this.chapters = chaptersInst;
+			return this;
+		}
+
+		public BookBuilder(final String titleInst) {
+			this.title = titleInst;
+		}
+
+		public Book build() {
+			return new Book(this);
+		}
+	}
+
 }
