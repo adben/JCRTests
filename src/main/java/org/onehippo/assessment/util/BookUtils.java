@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Utility class for book {@link javax.jcr.Node} proposes
@@ -109,7 +110,7 @@ public final class BookUtils {
 	 * @return a random integer
 	 */
 	public static int getRandom(int max) {
-		return (int) (Math.random() * max);
+		return new Random().nextInt(max);
 	}
 
 	/**
