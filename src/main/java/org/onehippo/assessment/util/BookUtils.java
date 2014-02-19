@@ -208,7 +208,7 @@ public final class BookUtils {
 	 * @param book the Book to display
 	 */
 	private static void showBook(Book book) {
-		LOG.info("Rendering Book => {}", book.toString());
+		LOG.info(":: The Book :: \n {}", book.toString());
 	}
 
 	/**
