@@ -32,41 +32,50 @@ public class HippoObservationTest extends TestCase {
 		hippoObservation.activate();
 		final Session session = RepoConnector.INSTANCE.getSession();
 		createEmptyBook(session, "/content/books/");
-		createEmptyBook(session, "/content/books/");
 		//assertThat(session, is(nullValue()));
 	}
 
-	private static void createEmptyBook(Session session, String repositoryBooksLocation) {
-		LOG.info(":: try to create the   ::");
+	/**
+	 * Testing proposes
+	 *
+	 * @param session                 the session
+	 * @param repositoryBooksLocation the book parent node path
+	 */
+	protected static void createEmptyBook(Session session, String repositoryBooksLocation) {
+		LOG.info(":: About to create the book node ::");
 		Node booksParent = null;
-		String bookPath = null;
-
+		if (null == session) {
+			LOG.error("Invalid session, please confirm the state of the observer");
+		}
 		try {
 			booksParent = session.getNode(repositoryBooksLocation);
 		} catch (RepositoryException e) {
 			LOG.error("the given path {} for persist the Books does not exist on the repository", repositoryBooksLocation);
 		}
 		if (null != booksParent) {
-			Node bookNode = buildBook(booksParent);
+			Node book = null;
+			String nameBook = BookUtils.obtainRandomTitleName("Book") + BookUtils.getRandom(10);
 			try {
-				bookPath = bookNode.getPath();
+				book = booksParent.addNode(BookUtils.obtainJcrName(nameBook), BookUtils.BOOK_PRIMARY_TYPE);
+				book.setProperty(BookUtils.BOOK_NAME_PROPERTY, nameBook + BookUtils.getRandom(10));
 				session.save();
+				Thread.sleep(2000);
+				book.setProperty(BookUtils.BOOK_NAME_PROPERTY, nameBook + BookUtils.getRandom(10));
+				session.save();
+				Thread.sleep(2000);
+				book.setProperty(BookUtils.BOOK_NAME_PROPERTY, nameBook + BookUtils.getRandom(10));
+				session.save();
+				Thread.sleep(2000);
+				book.setProperty(BookUtils.BOOK_NAME_PROPERTY, nameBook + BookUtils.getRandom(10));
+				session.save();
+				Thread.sleep(2000);
 			} catch (RepositoryException e) {
-				LOG.error("Cannot persist the just created book at {}", bookPath);
+				LOG.error("Cannot persist the just created book", e);
+			} catch (InterruptedException e) {
+				LOG.error("Unable to remove the EventListener", e);
 			}
 		}
 	}
 
 
-	private static Node buildBook(Node booksParent) {
-		Node book = null;
-		String nameBook = BookUtils.obtainRandomTitleName("Book") + BookUtils.getRandom(10);
-		try {
-			book = booksParent.addNode(BookUtils.obtainJcrName(nameBook), BookUtils.BOOK_PRIMARY_TYPE);
-			book.setProperty(BookUtils.BOOK_NAME_PROPERTY, nameBook);
-		} catch (RepositoryException e) {
-			LOG.error("Cannot create the book in the repository with exception, {}", e);
-		}
-		return book;
-	}
 }

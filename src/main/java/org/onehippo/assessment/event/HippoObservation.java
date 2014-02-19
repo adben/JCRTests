@@ -21,8 +21,8 @@ public class HippoObservation implements EventListener {
 
 	public void activate() throws Exception {
 		LOG.info("activating HippoObservation...");
+		counter = new Counter();
 		try {
-			counter = new Counter();
 			RepoConnector.INSTANCE.initializeConnection();
 			Session session = RepoConnector.INSTANCE.getSession();
 			final ObservationManager observationManager = session.getWorkspace().getObservationManager();
@@ -51,7 +51,7 @@ public class HippoObservation implements EventListener {
 			final ObservationManager observationManager = session.getWorkspace().getObservationManager();
 			observationManager.removeEventListener(this);
 		} catch (RepositoryException e) {
-			LOG.error("unable to deregister session", e);
+			LOG.error("Unable to remove the EventListener", e);
 			throw new Exception(e);
 		}
 		RepoConnector.INSTANCE.logout();
@@ -60,23 +60,27 @@ public class HippoObservation implements EventListener {
 
 	@Override
 	public void onEvent(EventIterator eventIterator) {
+		LOG.info("Found event !!!!!!");
 		try {
+			int currentCounter = 0;
 			while (eventIterator.hasNext()) {
 				LOG.info("something has been changed at : {}", eventIterator.nextEvent().getPath());
-				int countAtomically = counter.getCountAtomically();
-				if (6 < countAtomically) {
+				currentCounter = counter.getCountAtomically();
+				if (5 < currentCounter) {
 					try {
-						LOG.info("count on {}, reached max events.", countAtomically);
+						LOG.info("count on {}, reached max events.", currentCounter);
 						deactivate();
 					} catch (Exception e) {
 						LOG.error("unable to deactivate the Listener", e);
 					}
 				} else {
-					LOG.info("count on {}", countAtomically);
+					LOG.info("count on {}", currentCounter);
 				}
 			}
 		} catch (RepositoryException e) {
 			LOG.error("Error while treating events", e);
 		}
 	}
+
+
 }
