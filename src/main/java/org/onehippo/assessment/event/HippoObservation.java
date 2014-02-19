@@ -69,7 +69,8 @@ public class HippoObservation implements EventListener {
 		try {
 			while (eventIterator.hasNext()) {
 				///Notifying to the Counter that there was a change
-				LOG.info("something has been changed at : {}, counter at {}", eventIterator.nextEvent().getPath(), Counter.INSTANCE.increment());
+				Counter.INSTANCE.increment();
+				LOG.info("something has been changed at : {}, counter at {}", eventIterator.nextEvent().getPath(), Counter.INSTANCE.currentValue());
 			}
 		} catch (RepositoryException e) {
 			LOG.error("Error while treating events", e);
