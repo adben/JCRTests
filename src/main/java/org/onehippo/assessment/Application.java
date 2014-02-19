@@ -25,10 +25,9 @@ public final class Application {
 	public static void main(String[] args) {
 		try {
 			RepoConnector.INSTANCE.initializeConnection();
-			Session session = RepoConnector.INSTANCE.getSession();
-			secondTask(session, "/content");
-			thirdTask(session, "hippo");
-			fourTask(session, "/content/books");
+			secondTask(RepoConnector.INSTANCE.getSession(), "/content");
+			thirdTask(RepoConnector.INSTANCE.getSession(), "hippo");
+			fourTask(RepoConnector.INSTANCE.getSession(), "/content/books");
 		} catch (RepositoryException e) {
 			LOG.info("Error establishing connection to the repo " + e);
 		} finally {
@@ -36,26 +35,60 @@ public final class Application {
 		}
 	}
 
-	private static void secondTask(Session session, String scope) throws RepositoryException {
+	/**
+	 * Traverses all nodes within {@code path} part of the tree and:
+	 * <ul>
+	 * <li>Print the path of each node</li>
+	 * <li>Print the properties for every node (type & value(s))</li>
+	 * </ul>
+	 *
+	 * @param session the  session
+	 * @param path    the path to print
+	 */
+	protected static void secondTask(Session session, String path) {
 		LOG.info(":: Second ::");
-		Node root = session.getNode(scope);
-		NodeIterator nodeIt = root.getNodes();
-		NodeUtils.navigateNode("", nodeIt);
+		try {
+			Node root = session.getNode(path);
+			NodeIterator nodeIt = root.getNodes();
+			NodeUtils.navigateNode("", nodeIt);
+		} catch (RepositoryException e) {
+			LOG.info("Error obtaining the node information at {} with exception {}", path, e);
+		}
+
 	}
 
-	private static void thirdTask(Session session, String queryTerm) throws RepositoryException {
+	/**
+	 * Executes a earches for all nodes that contain the {@code queryTerm}. Iterating through these nodes and print their location.
+	 *
+	 * @param session   the session
+	 * @param queryTerm the text to search
+	 */
+	protected static void thirdTask(Session session, String queryTerm) {
 		LOG.info(":: Third ::");
+		//::: //*[jcr:contains(.,'hippo')]
 		final String query = JCR_QUERY_PREFIX + queryTerm + JCR_QUERY_SUFFIX;
-		final QueryResult queryResult = session.getWorkspace()
-				.getQueryManager()
-				.createQuery(query, Query.XPATH)
-				.execute();
-		LOG.info("Query executed :: " + query);
-		NodeIterator resultNodes = queryResult.getNodes();
-		NodeUtils.navigateQueryResponseNode(resultNodes);
+		final QueryResult queryResult;
+		try {
+			queryResult = session.getWorkspace()
+					.getQueryManager()
+					.createQuery(query, Query.XPATH)   //XPATH is Deprecated in JCR 2.0, should use JCR_SQL2 or JCR_JQOM instead?
+					.execute();
+			LOG.info("Query executed :: " + query);
+			NodeIterator resultNodes = queryResult.getNodes();
+			NodeUtils.navigateQueryResponseNode(resultNodes);
+		} catch (RepositoryException e) {
+			LOG.info("There was an error trying to execute the query {}, with exception {}", query, e);
+		}
+
 	}
 
-	private static void fourTask(Session session, String repositoryBooksLocation) {
+	/**
+	 * Creates a book with the corresponding chapters and paragraph, if any. and displays the representation of this book
+	 *
+	 * @param session                 the session
+	 * @param repositoryBooksLocation the repository location where the books should be created
+	 */
+	protected static void fourTask(Session session, String repositoryBooksLocation) {
 		LOG.info(":: Four ::");
 		Node booksParent = null;
 		String bookPath = null;

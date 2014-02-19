@@ -18,7 +18,7 @@ public enum RepoConnector {
 
 	private Session session;
 
-	public void initializeConnection() {
+	public void initializeConnection() throws RepositoryException {
 		HippoRepository repo;
 		Session obtainedSession = null;
 		String repoUrl = "rmi://127.0.0.1:1099/hipporepository";

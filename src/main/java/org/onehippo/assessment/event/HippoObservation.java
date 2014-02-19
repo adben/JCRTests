@@ -32,7 +32,7 @@ public class HippoObservation implements EventListener {
 					true, //is Deep?
 					null, //uuids filter
 					null, //nodetypes filter
-					false);
+					false); //no local
 			LOG.info("******** Added JCR event listener");
 		} catch (RepositoryException e) {
 			LOG.error("unable to register session", e);
