@@ -32,7 +32,6 @@ public class HippoObservationTest extends TestCase {
 		hippoObservation.activate();
 		final Session session = RepoConnector.INSTANCE.getSession();
 		createEmptyBook(session, "/content/books/");
-		//assertThat(session, is(nullValue()));
 	}
 
 	/**
@@ -57,18 +56,14 @@ public class HippoObservationTest extends TestCase {
 			String nameBook = BookUtils.obtainRandomTitleName("Book") + BookUtils.getRandom(10);
 			try {
 				book = booksParent.addNode(BookUtils.obtainJcrName(nameBook), BookUtils.BOOK_PRIMARY_TYPE);
-				book.setProperty(BookUtils.BOOK_NAME_PROPERTY, nameBook + BookUtils.getRandom(10));
-				session.save();
-				Thread.sleep(2000);
-				book.setProperty(BookUtils.BOOK_NAME_PROPERTY, nameBook + BookUtils.getRandom(10));
-				session.save();
-				Thread.sleep(2000);
-				book.setProperty(BookUtils.BOOK_NAME_PROPERTY, nameBook + BookUtils.getRandom(10));
-				session.save();
-				Thread.sleep(2000);
-				book.setProperty(BookUtils.BOOK_NAME_PROPERTY, nameBook + BookUtils.getRandom(10));
-				session.save();
-				Thread.sleep(2000);
+				//created the book node, changing the name to the book several times
+				for (int i = 0; i < 9; i++) {
+					final String bookName = nameBook + BookUtils.getRandom(10);
+					book.setProperty(BookUtils.BOOK_NAME_PROPERTY, bookName);
+					LOG.info("new book name {}", bookName);
+					Thread.sleep(2000);
+					session.save();
+				}
 			} catch (RepositoryException e) {
 				LOG.error("Cannot persist the just created book", e);
 			} catch (InterruptedException e) {

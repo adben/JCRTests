@@ -62,7 +62,7 @@ public class HippoObservation implements EventListener {
 	public void onEvent(EventIterator eventIterator) {
 		LOG.info("Found event !!!!!!");
 		try {
-			int currentCounter = 0;
+			int currentCounter;
 			while (eventIterator.hasNext()) {
 				LOG.info("something has been changed at : {}", eventIterator.nextEvent().getPath());
 				currentCounter = counter.getCountAtomically();
