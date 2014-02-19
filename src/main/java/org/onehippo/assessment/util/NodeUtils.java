@@ -23,9 +23,14 @@ public final class NodeUtils {
 	private NodeUtils() {
 	}
 
-
+	/**
+	 * Printout the {@link javax.jcr.Node} names of child nodes
+	 *
+	 * @param nodeIt the parent {@link javax.jcr.Node}
+	 * @throws RepositoryException
+	 */
 	public static void navigateQueryResponseNode(NodeIterator nodeIt) throws RepositoryException {
-		// print out node names of roots child nodes
+		//
 		while (nodeIt.hasNext()) {
 			Node child = nodeIt.nextNode();
 			printNodePath("", child);

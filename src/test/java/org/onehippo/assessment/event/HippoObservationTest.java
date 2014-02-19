@@ -46,7 +46,7 @@ public class HippoObservationTest extends TestCase {
 	}
 
 	/**
-	 * Book creator for  proposes
+	 * Book creator for testing proposes
 	 *
 	 * @param session                 the session
 	 * @param repositoryBooksLocation the book parent node path
