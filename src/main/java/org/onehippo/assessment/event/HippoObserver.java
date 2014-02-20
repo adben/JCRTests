@@ -13,8 +13,8 @@ import javax.jcr.observation.ObservationManager;
 /**
  *
  */
-public class HippoObservation implements EventListener {
-	private static final Logger LOG = LoggerFactory.getLogger(HippoObservation.class);
+public class HippoObserver implements EventListener {
+	private static final Logger LOG = LoggerFactory.getLogger(HippoObserver.class);
 	private static final String CONTENT_PATH = "/content/";
 
 	/**
@@ -23,7 +23,7 @@ public class HippoObservation implements EventListener {
 	 * @throws Exception The exception if something wrong occurs
 	 */
 	public void activate() throws Exception {
-		LOG.info("activating HippoObservation...");
+		LOG.info("activating HippoObserver ...");
 		try {
 			RepoConnector.INSTANCE.initializeConnection();
 			final ObservationManager observationManager = RepoConnector.INSTANCE.getSession().
@@ -51,7 +51,7 @@ public class HippoObservation implements EventListener {
 	 * @throws Exception The exception if something wrong occurs
 	 */
 	public void deactivate() throws Exception {
-		LOG.info("deactivating HippoObservation...");
+		LOG.info("deactivating HippoObserver...");
 		try {
 			final ObservationManager observationManager = RepoConnector.INSTANCE.getSession().getWorkspace().getObservationManager();
 			observationManager.removeEventListener(this);

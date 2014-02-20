@@ -13,22 +13,22 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 /**
- * Test for {@link org.onehippo.assessment.event.HippoObservation}
+ * Test for {@link HippoObserver}
  */
-public class HippoObservationTest extends TestCase {
-	private static final Logger LOG = LoggerFactory.getLogger(HippoObservationTest.class);
+public class HippoObserverTest extends TestCase {
+	private static final Logger LOG = LoggerFactory.getLogger(HippoObserverTest.class);
 	private static final int MILLIS = 20000;
 
-	HippoObservation hippoObservation;
+	HippoObserver hippoObserver;
 
 	@Before
 	public void setUp() throws Exception {
-		hippoObservation = new HippoObservation();
+		hippoObserver = new HippoObserver();
 	}
 
 	@Test
 	public void testObservation() throws Exception {
-		hippoObservation.activate();
+		hippoObserver.activate();
 		//This will trigger 3 Event changes at the repo
 		Node emptyBook = createEmptyBook(RepoConnector.INSTANCE.getSession(), "/content/books/");
 		Thread.sleep(MILLIS);
@@ -43,7 +43,7 @@ public class HippoObservationTest extends TestCase {
 		}
 
 		LOG.info("Counter at {}, reached max events. Done", Counter.INSTANCE.currentValue());
-		hippoObservation.deactivate();
+		hippoObserver.deactivate();
 	}
 
 	/**
