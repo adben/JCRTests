@@ -7,6 +7,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
+import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
@@ -88,14 +89,29 @@ public final class NodeUtils {
 					// A multi-valued property, print all values
 					Value[] values = property.getValues();
 					for (Value value : values) {
-						LOG.info(indent + property.getName() + " = " + value.getString());
+						LOG.info(indent + property.getName() + " = (" + obtainPropertyType(property) + ")" + value.getString());
 					}
 				} else {
 					// A single-valued property
-					LOG.info(indent + property.getName() + " = " + property.getString());
+					LOG.info(indent + property.getName() + " = (" + obtainPropertyType(property) + ")" + property.getString());
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns the JCR's property Type
+	 *
+	 * @param property the property
+	 * @return the property type as a string
+	 */
+	private static String obtainPropertyType(Property property) {
+		try {
+			return PropertyType.nameFromValue(property.getType());
+		} catch (RepositoryException e) {
+			LOG.info("Error obtaining the property type information, with exception {}", e);
+		}
+		return "";
 	}
 
 	/******************** The Tasks *****************/
